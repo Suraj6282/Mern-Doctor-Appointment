@@ -9,10 +9,9 @@ const DoctorAppointments = () => {
 
   const { dToken, appointments, getAppointments, cancelAppointment, completeAppointment } = useContext(DoctorContext)
   const { slotDateFormat, calculateAge, currency } = useContext(AppContext)
-
-  console.log(getAppointments.date);
   
 
+  
   useEffect(() => {
     if (dToken) {
       getAppointments()
