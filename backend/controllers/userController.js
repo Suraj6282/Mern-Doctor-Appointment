@@ -183,6 +183,7 @@ const bookAppointment = async (req, res) => {
     }
 }
 
+
 // API to cancel appointment
 const cancelAppointment = async (req, res) => {
     try {
