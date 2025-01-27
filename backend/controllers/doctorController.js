@@ -32,7 +32,6 @@ import mongoose from "mongoose";
 //     }
 // }
 
-const loginDoctor = async (req, res) => {
 //   try {
 //     const { email, password } = req.body;
 
@@ -58,36 +57,37 @@ const loginDoctor = async (req, res) => {
 //     res.json({ success: false, message: error.message });
 //   }
 
-try {
+const loginDoctor = async (req, res) => {
+    try {
 
-    const { email, password } = req.body
-    const user = await doctorModel.findOne({ email })
+        const { email, password } = req.body
+        const user = await doctorModel.findOne({ email })
 
-    if (!user) {
-        return res.json({ success: false, message: "Invalid credentials" })
+        if (!user) {
+            return res.json({ success: false, message: "Invalid credentials" })
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+
+        if (isMatch) {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+            res.json({ success: true, token })
+        } else {
+            res.json({ success: false, message: "Invalid credentials" })
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
     }
-
-    const isMatch = await bcrypt.compare(password, user.password)
-
-    if (isMatch) {
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-        res.json({ success: true, token })
-    } else {
-        res.json({ success: false, message: "Invalid credentials" })
-    }
-
-
-} catch (error) {
-    console.log(error)
-    res.json({ success: false, message: error.message })
-}
 }
 
 
 // API to get doctor appointments for doctor panel
 const appointmentsDoctor = async (req, res) => {
     try {
-        const { docId } = req.user; // Use docId from req.user (set by authDoctor middleware)
+        const { docId } = req.user;
         console.log("Fetching appointments for doctor ID:", docId); // Debugging: Log docId
 
         // Fetch appointments for the doctor
@@ -112,7 +112,7 @@ const appointmentsDoctor = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "An error occurred while fetching appointments. Please try again later.",
-            errorDetails: process.env.NODE_ENV === "development" ? error.message : undefined, // Include error details only in development
+            errorDetails: process.env.NODE_ENV === "development" ? error.message : undefined,
         });
     }
 };
@@ -241,7 +241,7 @@ const changeAvailablity = async (req, res) => {
 const doctorProfile = async (req, res) => {
     try {
         console.log('Incoming Request to /api/doctor/profile');
-        
+
         const { docId } = req.user;
         console.log('Extracted docId:', docId);
 
@@ -353,7 +353,7 @@ const updateDoctorProfile = async (req, res) => {
 //                 earnings += item.amount;
 //             }
 //         });
-        
+
 
 //         let patients = []
 

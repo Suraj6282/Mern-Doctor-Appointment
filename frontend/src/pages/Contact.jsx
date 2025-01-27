@@ -17,7 +17,7 @@ const Contact = () => {
           <p className=' text-gray-500'>Tel: 02767 220 086 <br /> Email: Hospital@gmail.com</p>
           <p className=' font-semibold text-lg text-gray-600'>MORE INFORMATION</p>
           {/* <p className=' text-gray-500'>Learn more about our teams and job openings.</p> */}
-          <button className='border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500'>Explore</button>
+          <a href="https://www.justdial.com/Sidhpur/Siddhpur-General-Hospital-Sidhpur/9999P2766-2766-190319174619-D5I6_BZDET" target='_blank' className='border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500'>Explore</a>
         </div>
       </div>
 

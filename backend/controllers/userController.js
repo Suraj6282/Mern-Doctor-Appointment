@@ -17,46 +17,39 @@ const razorpayInstance = new razorpay({
 
 // API to register user
 const registerUser = async (req, res) => {
-
     try {
         const { name, email, password } = req.body;
 
-        // checking for all data to register user
-        if (!name || !email || !password) {
-            return res.json({ success: false, message: 'Missing Details' })
+        // Check if the user already exists
+        const userExists = await userModel.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ success: false, message: 'User already exists' });
         }
 
-        // validating email format
-        if (!validator.isEmail(email)) {
-            return res.json({ success: false, message: "Please enter a valid email" })
-        }
-
-        // validating strong password
-        if (password.length < 8) {
-            return res.json({ success: false, message: "Please enter a strong password" })
-        }
-
-        // hashing user password
-        const salt = await bcrypt.genSalt(10); // the more no. round the more time it will take
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        const userData = {
+        // Create a new user
+        const user = new userModel({
             name,
             email,
-            password: hashedPassword,
-        }
+            password,
+        });
 
-        const newUser = new userModel(userData)
-        const user = await newUser.save()
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        // Save user to the database
+        await user.save();
 
-        res.json({ success: true, token })
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
+        // Send response with token
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            token,  // Send the JWT token in the response
+        });
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server Error' });
     }
-}
+};
 
 // API to login user
 const loginUser = async (req, res) => {
@@ -83,6 +76,9 @@ const loginUser = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+
+
 
 // API to get user profile data
 const getProfile = async (req, res) => {
@@ -185,7 +181,6 @@ const bookAppointment = async (req, res) => {
         console.log(error)
         res.json({ success: false, message: error.message })
     }
-
 }
 
 // API to cancel appointment
@@ -227,7 +222,6 @@ const listAppointment = async (req, res) => {
 
         const { userId } = req.body
         const appointments = await appointmentModel.find({ userId })
-
         res.json({ success: true, appointments })
 
     } catch (error) {
@@ -235,6 +229,7 @@ const listAppointment = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
 
 // API to make payment of appointment using razorpay
 const paymentRazorpay = async (req, res) => {

@@ -10,11 +10,15 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false)
   const { token, setToken, userData } = useContext(AppContext)
 
+  console.log
+  (token, userData)
+
   const logout = () => {
     localStorage.removeItem('token')
     setToken(false)
     navigate('/login')
   }
+
 
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-[#ADADAD]'>

@@ -1,3 +1,86 @@
+// import { createContext, useEffect, useState } from "react";
+// import { toast } from "react-toastify";
+// import axios from 'axios'
+
+// export const AppContext = createContext()
+
+// const AppContextProvider = (props) => {
+
+//     const currencySymbol = '₹'
+//     const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+//     const [doctors, setDoctors] = useState([])
+//     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
+//     const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')) ? JSON.parse(localStorage.getItem('userData')) : {})
+
+//     // Getting Doctors using API
+//     const getDoctosData = async () => {
+
+//         try {
+
+//             const { data } = await axios.get(backendUrl + '/api/doctor/list')
+//             if (data.success) {
+//                 setDoctors(data.doctors)
+//             } else {
+//                 toast.error(data.message)
+//             }
+
+//         } catch (error) {
+//             console.log(error)
+//             toast.error(error.message)
+//         }
+
+//     }
+
+//     // Getting User Profile using API
+//     const loadUserProfileData = async () => {
+        
+      
+//         try {
+//           const response = await axios.get('/api/user/get-profile', {
+//             headers: { Authorization: `Bearer ${token}` },  // Ensure 'Bearer ' is added
+//           });
+      
+//           if (response.data.success) {
+//             setUserData(response.data.userData);
+//             localStorage.setItem('userData', JSON.stringify(response.data.userData));
+//           } else {
+//             console.log(response.data.message);
+//           }
+//         } catch (error) {
+//           console.log('Error loading user data:', error.message);
+//         }
+//       };
+      
+
+//     useEffect(() => {
+//         getDoctosData()
+//     }, [])
+
+//     useEffect(() => {
+//         if (token) {
+//             loadUserProfileData()
+//         }
+//     }, [token])
+
+//     const value = {
+//         doctors, getDoctosData,
+//         currencySymbol,
+//         backendUrl,
+//         token, setToken,
+//         userData, setUserData, loadUserProfileData
+//     }
+
+//     return (
+//         <AppContext.Provider value={value}>
+//             {props.children}
+//         </AppContext.Provider>
+//     )
+
+// }
+
+// export default AppContextProvider
+
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from 'axios'

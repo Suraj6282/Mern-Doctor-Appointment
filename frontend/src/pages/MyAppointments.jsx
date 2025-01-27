@@ -62,7 +62,7 @@ const MyAppointments = () => {
             if (data.appointments && Array.isArray(data.appointments)) {
                 setAppointments(data.appointments.reverse())
             } else {
-                setAppointments([]); // Set an empty array if appointments are missing
+                setAppointments([]); 
             }
     
         } catch (error) {
